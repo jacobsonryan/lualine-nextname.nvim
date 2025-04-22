@@ -31,6 +31,7 @@ This plugin is meant to be used **as a dependency of `nvim-lualine/lualine.nvim`
 {
   "nvim-lualine/lualine.nvim",
   dependencies = {
+     "nvim-tree/nvim-web-devicons",
     "jacobsonryan/lualine-nextname.nvim", -- ✅ Add it here
   },
   config = function()
