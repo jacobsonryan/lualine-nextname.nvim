@@ -1,5 +1,3 @@
-local M = {}
-
 local devicons = require("nvim-web-devicons")
 
 local function capitalize(str)
@@ -10,7 +8,7 @@ local function bold(str)
   return "%#StatusLineBold#" .. str .. "%*"
 end
 
-M.get = function()
+return function()
   local filepath = vim.api.nvim_buf_get_name(0)
   local filename = vim.fn.fnamemodify(filepath, ":t")
   local ext = vim.fn.fnamemodify(filepath, ":e")
@@ -29,5 +27,3 @@ M.get = function()
 
   return bold(icon .. " " .. filename)
 end
-
-return M
