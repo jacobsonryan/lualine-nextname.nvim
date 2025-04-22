@@ -8,6 +8,14 @@ local function bold(str)
   return "%#StatusLineBold#" .. str .. "%*"
 end
 
+local function format_label(left, right, use_brackets)
+  if use_brackets then
+    return string.format("[%s] %s", left, right)
+  else
+    return string.format("%s ➜ %s", left, right)
+  end
+end
+
 return function(opts)
   opts = opts or {}
   local use_brackets = opts.use_brackets == true
@@ -18,21 +26,15 @@ return function(opts)
   local icon = devicons.get_icon(filename, ext, { default = true })
 
   if filename == "page.tsx" or filename == "page.jsx" then
-    local folder = vim.fn.fnamemodify(filepath, ":h:t")
-    local label = use_brackets
-      and string.format("[%s] %s", capitalize(folder), filename)
-      or string.format("%s ➜ %s", capitalize(folder), filename)
-    return bold(icon .. " " .. label)
+    local folder = capitalize(vim.fn.fnamemodify(filepath, ":h:t"))
+    return bold(icon .. " " .. format_label(folder, filename, use_brackets))
   end
 
   if filename == "route.ts" or filename == "route.js" then
     local normalized = filepath:gsub("\\", "/")
     local api_path = normalized:match("app/(api/.-)/route%.%a+$")
     if api_path then
-      local label = use_brackets
-        and string.format("[%s] %s", api_path, filename)
-        or string.format("%s ➜ %s", api_path, filename)
-      return bold(label)
+      return bold(format_label(api_path, filename, use_brackets))
     end
   end
 
