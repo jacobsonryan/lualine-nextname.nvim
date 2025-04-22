@@ -27,7 +27,7 @@ return function(opts)
 
   if filename == "route.ts" or filename == "route.js" then
     local normalized = filepath:gsub("\\", "/")
-    local api_path = normalized:match("app/api/(.-)/route%.%a+$")
+    local api_path = normalized:match("app/(api/.-)/route%.%a+$")
     if api_path then
       local label = use_brackets
         and string.format("[%s] %s", api_path, filename)
