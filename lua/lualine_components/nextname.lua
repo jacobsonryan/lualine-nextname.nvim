@@ -10,6 +10,10 @@ end
 
 return function()
   local filepath = vim.api.nvim_buf_get_name(0)
+  if filepath == "" then
+    return "" -- or return bold("No File") if you want a placeholder
+  end
+
   local filename = vim.fn.fnamemodify(filepath, ":t")
   local ext = vim.fn.fnamemodify(filepath, ":e")
   local icon = devicons.get_icon(filename, ext, { default = true })
