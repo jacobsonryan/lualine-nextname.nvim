@@ -8,7 +8,10 @@ local function bold(str)
   return "%#StatusLineBold#" .. str .. "%*"
 end
 
-return function()
+return function(opts)
+  opts = opts or {}
+  local use_brackets = opts.use_brackets == true
+
   local filepath = vim.api.nvim_buf_get_name(0)
   local filename = vim.fn.fnamemodify(filepath, ":t")
   local ext = vim.fn.fnamemodify(filepath, ":e")
@@ -16,13 +19,21 @@ return function()
 
   if filename == "page.tsx" or filename == "page.jsx" then
     local folder = vim.fn.fnamemodify(filepath, ":h:t")
-    return bold(icon .. " " .. capitalize(folder) .. " ➜ " .. filename)
+    local label = use_brackets
+      and string.format("[%s] %s", capitalize(folder), filename)
+      or string.format("%s ➜ %s", capitalize(folder), filename)
+    return bold(icon .. " " .. label)
   end
 
   if filename == "route.ts" or filename == "route.js" then
     local normalized = filepath:gsub("\\", "/")
     local api_path = normalized:match("app/api/(.-)/route%.%a+$")
-    return bold("/api/" .. (api_path or ""))
+    if api_path then
+      local label = use_brackets
+        and string.format("[%s] %s", api_path, filename)
+        or string.format("%s ➜ %s", api_path, filename)
+      return bold(label)
+    end
   end
 
   return bold(icon .. " " .. filename)
