@@ -18,9 +18,10 @@ return function()
   local ext = vim.fn.fnamemodify(filepath, ":e")
   local icon = devicons.get_icon(filename, ext, { default = true })
 
-  -- Handle all common variations of Next.js pages
-  if filename:match("^page%.tsx?$") or filename:match("^page%.jsx?$") then
-    local folder = capitalize(vim.fn.fnamemodify(filepath, ":h:t"))
+  local folder = capitalize(vim.fn.fnamemodify(filepath, ":h:t"))
+
+  -- Handle Next.js special files like page, layout, template (any .js/.ts/.jsx/.tsx)
+  if filename:match("^(page|layout|template)%.%a+$") then
     return bold(icon .. " " .. folder .. " ➜ " .. filename)
   end
 
